@@ -40,10 +40,6 @@ public partial class BHYTDbContext : DbContext
 
     public virtual DbSet<Status> Statuses { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.UseSqlServer("Data Source=DESKTOP-GFADSU2\\MSSQLSERVER01;Initial Catalog=PTUD_BHYT;Integrated Security=True;TrustServerCertificate=True");
-    //}
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -65,39 +61,221 @@ public partial class BHYTDbContext : DbContext
         );
 
         modelBuilder.Entity<Compensation>().HasData(
-            new Compensation { Id = 1, Guid = Guid.NewGuid(), PolicyId = 1, EmployeeId = 1, Date = DateTime.Now, Amount = 1000.50, Note = "Bonus payment", Status = true },
-            new Compensation { Id = 2, Guid = Guid.NewGuid(), PolicyId = 2, EmployeeId = 2, Date = DateTime.Now, Amount = 750.25, Note = "Incentive payment", Status = true }
+            new Compensation
+            {
+                Id = 1,
+                Guid = Guid.NewGuid(),
+                PolicyId = 1,
+                EmployeeId = 1,
+                Date = DateTime.Now,
+                Amount = 1000.50,
+                Note = "Bonus payment",
+                Status = true
+            },
+            new Compensation
+            {
+                Id = 2,
+                Guid = Guid.NewGuid(),
+                PolicyId = 2,
+                EmployeeId = 2,
+                Date = DateTime.Now,
+                Amount = 750.25,
+                Note = "Incentive payment",
+                Status = true
+            }
         );
 
+        modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = 1,
+                    Guid = Guid.NewGuid(),
+                    Username = "customer1",
+                    Password = "customer123",
+                    Fullname = "customer123 User",
+                    Address = "123 ABC Street",
+                    Phone = "123456789",
+                    Birthday = new DateTime(1990, 1, 1),
+                    Sex = 1,
+                    Email = "customer1@gmail.com",
+                    StatusId = 1
+                },
+                new User
+                {
+                    Id = 2,
+                    Guid = Guid.NewGuid(),
+                    Username = "employee",
+                    Password = "employee123",
+                    Fullname = "employee123 User",
+                    Address = "456 XYZ Street",
+                    Phone = "987654321",
+                    Birthday = new DateTime(1995, 5, 5),
+                    Sex = 2,
+                    Email = "employee@gmail.com",
+                    StatusId = 1
+                }
+            );
+
         modelBuilder.Entity<Customer>().HasData(
-            new Customer { Id = 1, Guid = Guid.NewGuid(), Username = "user1", Password = "password1", Fullname = "John Doe", Address = "123 Main St", Phone = "1234567890", Birthday = new DateTime(1990, 1, 1), Sex = 1, Email = "user1@example.com", StatusId = 1, RoleId = 1, BankNumber = "1234567890", Bank = "ABC Bank" },
-            new Customer { Id = 2, Guid = Guid.NewGuid(), Username = "user2", Password = "password2", Fullname = "Jane Smith", Address = "456 Elm St", Phone = "9876543210", Birthday = new DateTime(1995, 5, 10), Sex = 0, Email = "user2@example.com", StatusId = 1, RoleId = 2, BankNumber = "0987654321", Bank = "XYZ Bank" }
-        );
+               new Customer
+               {
+                   Id = 1,
+                   UserID = 1,
+                   BankNumber = "1234567890",
+                   Bank = "ABC Bank"
+               }
+           );
         modelBuilder.Entity<CustomerPolicy>().HasData(
-            new CustomerPolicy { Id = 1, Guid = Guid.NewGuid(), CustomerId = 1, StartDate = DateTime.Now, CreatedDate = DateTime.Now, EndDate = DateTime.Now.AddYears(1), PremiumAmount = 1000.50, PaymentOption = true, CoverageType = "Comprehensive", DeductibleAmount = 500.00, BenefitId = 1, InsuranceId = 1, LatestUpdate = DateTime.Now, Description = "Policy for car insurance", Status = true, Company = "ABC Insurance" },
-            new CustomerPolicy { Id = 2, Guid = Guid.NewGuid(), CustomerId = 2, StartDate = DateTime.Now, CreatedDate = DateTime.Now, EndDate = DateTime.Now.AddYears(1), PremiumAmount = 1500.75, PaymentOption = false, CoverageType = "Third Party", DeductibleAmount = 1000.00, BenefitId = 2, InsuranceId = 2, LatestUpdate = DateTime.Now, Description = "Policy for home insurance", Status = true, Company = "XYZ Insurance" }
+            new CustomerPolicy
+            {
+                Id = 1,
+                Guid = Guid.NewGuid(),
+                CustomerId = 1,
+                StartDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
+                EndDate = DateTime.Now.AddYears(1),
+                PremiumAmount = 1000.50,
+                PaymentOption = true,
+                CoverageType = "Comprehensive",
+                DeductibleAmount = 500.00,
+                BenefitId = 1,
+                InsuranceId = 1,
+                LatestUpdate = DateTime.Now,
+                Description = "Policy for car insurance",
+                Status = true,
+                Company = "ABC Insurance"
+            },
+            new CustomerPolicy
+            {
+                Id = 2,
+                Guid = Guid.NewGuid(),
+                CustomerId = 2,
+                StartDate = DateTime.Now,
+                CreatedDate = DateTime.Now,
+                EndDate = DateTime.Now.AddYears(1),
+                PremiumAmount = 1500.75,
+                PaymentOption = false,
+                CoverageType = "Third Party",
+                DeductibleAmount = 1000.00,
+                BenefitId = 2,
+                InsuranceId = 2,
+                LatestUpdate = DateTime.Now,
+                Description = "Policy for home insurance",
+                Status = true,
+                Company = "XYZ Insurance"
+            }
         );
         modelBuilder.Entity<Employee>().HasData(
-            new Employee { Id = 1, Guid = Guid.NewGuid(), Username = "john_doe", Password = "password123", Fullname = "John Doe", Address = "123 Main St", Phone = "1234567890", Birthday = new DateTime(1990, 1, 1), Sex = 0, Email = "john.doe@example.com", StatusId = 1, RoleId = 1 },
-            new Employee { Id = 2, Guid = Guid.NewGuid(), Username = "jane_smith", Password = "password456", Fullname = "Jane Smith", Address = "456 Elm St", Phone = "9876543210", Birthday = new DateTime(1995, 5, 10), Sex = 1, Email = "jane.smith@example.com", StatusId = 1, RoleId = 2 }
-        );
+                new Employee
+                {
+                    Id = 2,
+                    Guid = Guid.NewGuid(),
+                    UserID = 2
+                }
+            );
         modelBuilder.Entity<HealthHistory>().HasData(
-            new HealthHistory { Id = 1, Guid = Guid.NewGuid(), CustomerId = 1, InsuranceId = 1, CreatedDate = DateTime.Now, Detail = "Patient's health history detail", Note = "Additional notes about the health history", Diagnostic = "Diagnosis of the patient's condition", HospitalNumber = "123456789", Condition = "health condition" },
-            new HealthHistory { Id = 2, Guid = Guid.NewGuid(), CustomerId = 2, InsuranceId = 2, CreatedDate = DateTime.Now, Detail = "Patient's health history detail", Note = "Additional notes about the health history", Diagnostic = "Diagnosis of the patient's condition", HospitalNumber = "987654321", Condition = "health condition" }
+            new HealthHistory
+            {
+                Id = 1,
+                Guid = Guid.NewGuid(),
+                CustomerId = 1,
+                InsuranceId = 1,
+                CreatedDate = DateTime.Now,
+                Detail = "Patient's health history detail",
+                Note = "Additional notes about the health history",
+                Diagnostic = "Diagnosis of the patient's condition",
+                HospitalNumber = "123456789",
+                Condition = "health condition"
+            },
+            new HealthHistory
+            {
+                Id = 2,
+                Guid = Guid.NewGuid(),
+                CustomerId = 2,
+                InsuranceId = 2,
+                CreatedDate = DateTime.Now,
+                Detail = "Patient's health history detail",
+                Note = "Additional notes about the health history",
+                Diagnostic = "Diagnosis of the patient's condition",
+                HospitalNumber = "987654321",
+                Condition = "health condition"
+            }
             );
         modelBuilder.Entity<Insurance>().HasData(
-            new Insurance { Id = 1, Guid = Guid.NewGuid(), Name = "Term Life Insurance", Description = "Provides coverage for a specific term or period of time", InsuranceTypeId = "1", StartAge = 18, EndAge = 65 },
-            new Insurance { Id = 2, Guid = Guid.NewGuid(), Name = "Family Health Insurance", Description = "Covers medical expenses for the entire family", InsuranceTypeId = "2", StartAge = 0, EndAge = 99 }
+            new Insurance
+            {
+                Id = 1,
+                Guid = Guid.NewGuid(),
+                Name = "Term Life Insurance",
+                Description = "Provides coverage for a specific term or period of time",
+                InsuranceTypeId = "1",
+                StartAge = 18,
+                EndAge = 65
+            },
+            new Insurance
+            {
+                Id = 2,
+                Guid = Guid.NewGuid(),
+                Name = "Family Health Insurance",
+                Description = "Covers medical expenses for the entire family",
+                InsuranceTypeId = "2",
+                StartAge = 0,
+                EndAge = 99
+            }
         );
 
         modelBuilder.Entity<InsurancePayment>().HasData(
-            new InsurancePayment { Id = 1, Guid = Guid.NewGuid(), CustomerId = 1, PolicyId = 1, Date = DateTime.Now, Amount = 1000.50, Status = true, Type = "Payment", Note = "Payment for insurance policy" },
-            new InsurancePayment { Id = 2, Guid = Guid.NewGuid(), CustomerId = 2, PolicyId = 2, Date = DateTime.Now, Amount = 1500.75, Status = true, Type = "Payment", Note = "Payment for insurance policy" }
+            new InsurancePayment
+            {
+                Id = 1,
+                Guid = Guid.NewGuid(),
+                CustomerId = 1,
+                PolicyId = 1,
+                Date = DateTime.Now,
+                Amount = 1000.50,
+                Status = true,
+                Type = "Payment",
+                Note = "Payment for insurance policy"
+            },
+            new InsurancePayment
+            {
+                Id = 2,
+                Guid = Guid.NewGuid(),
+                CustomerId = 2,
+                PolicyId = 2,
+                Date = DateTime.Now,
+                Amount = 1500.75,
+                Status = true,
+                Type = "Payment",
+                Note = "Payment for insurance policy"
+            }
         );
 
         modelBuilder.Entity<InsuranceRequired>().HasData(
-        new InsuranceRequired { Id = 1, Guid = Guid.NewGuid(), PolicyId = 1, Status = 1, Date = DateTime.Now, Amount = 500.50, MedicalServiceName = "Medical Checkup", ServiceDescription = "Required annual medical checkup", Note = "Please schedule the appointment." },
-        new InsuranceRequired { Id = 2, Guid = Guid.NewGuid(), PolicyId = 2, Status = 1, Date = DateTime.Now, Amount = 1000.75, MedicalServiceName = "Diagnostic Tests", ServiceDescription = "Required diagnostic tests for policy renewal", Note = "Please complete the tests by the specified date." }
+        new InsuranceRequired
+        {
+            Id = 1,
+            Guid = Guid.NewGuid(),
+            PolicyId = 1,
+            Status = 1,
+            Date = DateTime.Now,
+            Amount = 500.50,
+            MedicalServiceName = "Medical Checkup",
+            ServiceDescription = "Required annual medical checkup",
+            Note = "Please schedule the appointment."
+        },
+        new InsuranceRequired
+        {
+            Id = 2,
+            Guid = Guid.NewGuid(),
+            PolicyId = 2,
+            Status = 1,
+            Date = DateTime.Now,
+            Amount = 1000.75,
+            MedicalServiceName = "Diagnostic Tests",
+            ServiceDescription = "Required diagnostic tests for policy renewal",
+            Note = "Please complete the tests by the specified date."
+        }
         );
 
         modelBuilder.Entity<InsuranceType>().HasData(
@@ -110,8 +288,24 @@ public partial class BHYTDbContext : DbContext
             new PolicyApproval { Id = 2, Guid = Guid.NewGuid(), PolicyId = 2, EmployeeId = 2, ApprovalDate = DateTime.Now, StatusId = 2 }
         );
         modelBuilder.Entity<ResetPasswordRequest>().HasData(
-            new ResetPasswordRequest { Id = 1, Guid = Guid.NewGuid(), Accountid = "user1@example.com", Resetrequestcode = "ABC123", Requestdate = DateTime.Now, Resetdate = null },
-            new ResetPasswordRequest { Id = 2, Guid = Guid.NewGuid(), Accountid = "user2@example.com", Resetrequestcode = "XYZ789", Requestdate = DateTime.Now, Resetdate = null }
+            new ResetPasswordRequest
+            {
+                Id = 1,
+                Guid = Guid.NewGuid(),
+                Accountid = "user1@example.com",
+                Resetrequestcode = "ABC123",
+                Requestdate = DateTime.Now,
+                Resetdate = null
+            },
+            new ResetPasswordRequest
+            {
+                Id = 2,
+                Guid = Guid.NewGuid(),
+                Accountid = "user2@example.com",
+                Resetrequestcode = "XYZ789",
+                Requestdate = DateTime.Now,
+                Resetdate = null
+            }
         );
         modelBuilder.Entity<Role>().HasData(
             new Role { Id = 1, Guid = Guid.NewGuid(), Name = "employee" },
