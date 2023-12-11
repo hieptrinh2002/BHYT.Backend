@@ -1,16 +1,11 @@
-﻿namespace BHYT.API.Models.DbModels
+﻿namespace BHYT.API.Models.DTOs
 {
-    public class User
+    public class UserDTO
     {
-        public User()
-        {
-             
-        }
         public int Id { get; set; }
 
         public Guid? Guid { get; set; }
 
-        public int RoleId { get; set; }
         public required string Username { get; set; }
 
         public required string Password { get; set; }
@@ -28,10 +23,5 @@
         public string? Email { get; set; }
 
         public int? StatusId { get; set; }
-
-        public string? BankNumber { get; set; }
-
-        public string? Bank { get; set; }
-
     }
 }

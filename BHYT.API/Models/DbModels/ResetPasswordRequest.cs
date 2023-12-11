@@ -9,7 +9,7 @@ public partial class ResetPasswordRequest
 
     public Guid? Guid { get; set; }
 
-    public string? Accountid { get; set; }
+    public string? UserId { get; set; }
 
     public string? Resetrequestcode { get; set; }
 

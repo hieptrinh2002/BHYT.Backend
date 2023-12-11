@@ -9,5 +9,5 @@ public partial class Role
 
     public Guid? Guid { get; set; }
 
-    public string? Name { get; set; }
+    public string Name { get; set; }
 }

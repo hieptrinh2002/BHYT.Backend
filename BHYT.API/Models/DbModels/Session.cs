@@ -11,13 +11,13 @@ public partial class Session
 
     public string? AccountId { get; set; }
 
-    public DateTime? LOginDate { get; set; }
+    public DateTime? LoginDate { get; set; } //
 
-    public string? Appversion { get; set; }
+    public string? Appversion { get; set; } //
 
-    public string? SessionLastIp { get; set; }
+    public string? SessionLastIp { get; set; } 
 
-    public DateTime? SessionLastRefresh { get; set; }
+    public DateTime? SessionLastRefresh { get; set; } //
 
     public string? SessionToken { get; set; }
 

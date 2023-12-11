@@ -1,9 +1,13 @@
-﻿namespace BHYT.API.Utilities
+﻿using AutoMapper;
+using BHYT.API.Models.DbModels;
+using BHYT.API.Models.DTOs;
+
+namespace BHYT.API.Utilities
 {
-    public class AutoMapper
+    public class AutoMapper: Profile
     {
         public AutoMapper() {
-            //CreateMap<model,dto>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
         }
     }
 }

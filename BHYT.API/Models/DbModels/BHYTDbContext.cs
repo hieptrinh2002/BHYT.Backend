@@ -9,16 +9,11 @@ public partial class BHYTDbContext : DbContext
     public BHYTDbContext(DbContextOptions<BHYTDbContext> options): base(options)
     {
     }
-
     public virtual DbSet<Benefit> Benefits { get; set; }
 
     public virtual DbSet<Compensation> Compensations { get; set; }
 
-    public virtual DbSet<Customer> Customers { get; set; }
-
     public virtual DbSet<CustomerPolicy> CustomerPolicies { get; set; }
-
-    public virtual DbSet<Employee> Employees { get; set; }
 
     public virtual DbSet<HealthHistory> HealthHistories { get; set; }
 
@@ -39,6 +34,12 @@ public partial class BHYTDbContext : DbContext
     public virtual DbSet<Session> Sessions { get; set; }
 
     public virtual DbSet<Status> Statuses { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -90,6 +91,7 @@ public partial class BHYTDbContext : DbContext
                 {
                     Id = 1,
                     Guid = Guid.NewGuid(),
+                    RoleId = 1,
                     Username = "customer1",
                     Password = "customer123",
                     Fullname = "customer123 User",
@@ -104,6 +106,7 @@ public partial class BHYTDbContext : DbContext
                 {
                     Id = 2,
                     Guid = Guid.NewGuid(),
+                    RoleId = 2,
                     Username = "employee",
                     Password = "employee123",
                     Fullname = "employee123 User",
@@ -114,17 +117,8 @@ public partial class BHYTDbContext : DbContext
                     Email = "employee@gmail.com",
                     StatusId = 1
                 }
-            );
+            ) ;
 
-        modelBuilder.Entity<Customer>().HasData(
-               new Customer
-               {
-                   Id = 1,
-                   UserID = 1,
-                   BankNumber = "1234567890",
-                   Bank = "ABC Bank"
-               }
-           );
         modelBuilder.Entity<CustomerPolicy>().HasData(
             new CustomerPolicy
             {
@@ -165,14 +159,7 @@ public partial class BHYTDbContext : DbContext
                 Company = "XYZ Insurance"
             }
         );
-        modelBuilder.Entity<Employee>().HasData(
-                new Employee
-                {
-                    Id = 2,
-                    Guid = Guid.NewGuid(),
-                    UserID = 2
-                }
-            );
+       
         modelBuilder.Entity<HealthHistory>().HasData(
             new HealthHistory
             {
@@ -279,32 +266,40 @@ public partial class BHYTDbContext : DbContext
         );
 
         modelBuilder.Entity<InsuranceType>().HasData(
-            new InsuranceType { Id = 1, Guid = Guid.NewGuid(), Name = "Life Insurance", Description = "Provides coverage for the risk of life" },
-            new InsuranceType { Id = 2, Guid = Guid.NewGuid(), Name = "Health Insurance", Description = "Covers medical expenses and healthcare services" }
-        );
-
-        modelBuilder.Entity<PolicyApproval>().HasData(
-            new PolicyApproval { Id = 1, Guid = Guid.NewGuid(), PolicyId = 1, EmployeeId = 1, ApprovalDate = DateTime.Now, StatusId = 1 },
-            new PolicyApproval { Id = 2, Guid = Guid.NewGuid(), PolicyId = 2, EmployeeId = 2, ApprovalDate = DateTime.Now, StatusId = 2 }
-        );
-        modelBuilder.Entity<ResetPasswordRequest>().HasData(
-            new ResetPasswordRequest
+            new InsuranceType
             {
                 Id = 1,
                 Guid = Guid.NewGuid(),
-                Accountid = "user1@example.com",
-                Resetrequestcode = "ABC123",
-                Requestdate = DateTime.Now,
-                Resetdate = null
+                Name = "Life Insurance",
+                Description = "Provides coverage for the risk of life"
             },
-            new ResetPasswordRequest
+            new InsuranceType
             {
                 Id = 2,
                 Guid = Guid.NewGuid(),
-                Accountid = "user2@example.com",
-                Resetrequestcode = "XYZ789",
-                Requestdate = DateTime.Now,
-                Resetdate = null
+                Name = "Health Insurance",
+                Description = "Covers medical expenses and healthcare services"
+            }
+        );
+
+        modelBuilder.Entity<PolicyApproval>().HasData(
+            new PolicyApproval
+            {
+                Id = 1,
+                Guid = Guid.NewGuid(),
+                PolicyId = 1,
+                EmployeeId = 1,
+                ApprovalDate = DateTime.Now,
+                StatusId = 1
+            },
+            new PolicyApproval
+            {
+                Id = 2,
+                Guid = Guid.NewGuid(),
+                PolicyId = 2,
+                EmployeeId = 2,
+                ApprovalDate = DateTime.Now,
+                StatusId = 2
             }
         );
         modelBuilder.Entity<Role>().HasData(
@@ -317,8 +312,6 @@ public partial class BHYTDbContext : DbContext
         );
 
         base.OnModelCreating(modelBuilder);
-
-        OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
