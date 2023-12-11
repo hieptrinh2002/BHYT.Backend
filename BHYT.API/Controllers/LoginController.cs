@@ -28,17 +28,20 @@ namespace BHYT.API.Controllers
         private IEnumerable<Claim> GetClaims(User user)
         {
 
-            var roleName = _context.Roles
+            var roleName =  _context.Roles
                             .Where(r => r.Id == user.RoleId)
                             .Select(r => r.Name)
                             .FirstOrDefault();
+
+            var account =  _context.Accounts.FirstOrDefault(u => u.Id == user.AccountId);
+
             return new List<Claim> {
 
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                 new Claim(ClaimTypes.Role, roleName),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Name, account.Username),
 
             };
         }
@@ -51,47 +54,53 @@ namespace BHYT.API.Controllers
             {
                 if (dto != null && !string.IsNullOrEmpty(dto.Username) && !string.IsNullOrEmpty(dto.Password))
                 {
-                    var user = _context.Users.SingleOrDefault(u => u.Username == dto.Username);
-                    if (user != null)
+                    var account = _context.Accounts.SingleOrDefault(e => e.Username == dto.Username);
+                    if(account != null)
                     {
-                        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.Password);
-
-                        if (isPasswordValid)
+                        var user = _context.Users.SingleOrDefault(u => u.AccountId == account.Id);
+                        if (user != null)
                         {
-                            var authClaims = GetClaims(user);
+                            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, account.Password);
 
-                            (string token, DateTime expiration, string tokenId) = GenerateToken(authClaims);
-                            string refreshToken = GenerateRefreshToken();
-
-                            // save token and refresh token 
-                            var refreshTokenEntity = new RefreshToken
+                            if (isPasswordValid)
                             {
-                                Id = Guid.NewGuid(),
-                                AccessTokenId = tokenId,
-                                Username = user.Username,
-                                Token = refreshToken,
-                                IsUsed = false,
-                                IsRevoked = false,
-                                IssuedAt = DateTime.UtcNow,
-                                ExpiredAt = DateTime.UtcNow.AddHours(1)
-                            };
+                                var authClaims = GetClaims(user);
 
-                            await _context.RefreshTokens.AddAsync(refreshTokenEntity);
-                            await _context.SaveChangesAsync();
+                                (string token, DateTime expiration, string tokenId) = GenerateToken(authClaims);
+                                string refreshToken = GenerateRefreshToken();
 
-                            return Ok(new ApiResponseDTO
-                            {
-                                Success = true,
-                                Message = "Genarate token successfully",
-                                Data = new {
-                                    Token = token,
+                                // save token and refresh token 
+                                var refreshTokenEntity = new RefreshToken
+                                {
+                                    Id = Guid.NewGuid(),
+                                    AccessTokenId = tokenId,
+                                    AccountId = account.Id,
+                                    Token = refreshToken,
+                                    IsUsed = false,
+                                    IsRevoked = false,
                                     IssuedAt = DateTime.UtcNow,
-                                    ExpiredAt = expiration,
-                                    RefreshToken = refreshToken,
-                                }
-                            });
+                                    ExpiredAt = DateTime.UtcNow.AddHours(Convert.ToInt64(_configuration["Jwt:RefreshTokenExpiryTimeInHour"]))
+                                };
+
+                                await _context.RefreshTokens.AddAsync(refreshTokenEntity);
+                                await _context.SaveChangesAsync();
+
+                                return Ok(new ApiResponseDTO
+                                {
+                                    Success = true,
+                                    Message = "Genarate token successfully",
+                                    Data = new
+                                    {
+                                        Token = token,
+                                        IssuedAt = DateTime.UtcNow,
+                                        ExpiredAt = expiration,
+                                        RefreshToken = refreshToken,
+                                    }
+                                });
+                            }
+                            return BadRequest("invalid password !");
                         }
-                        return BadRequest("invalid password !");
+
                     }
 
                     return NotFound("Invalid credentials");
@@ -115,7 +124,7 @@ namespace BHYT.API.Controllers
             {
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
-                //Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInHour),
+                //Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInSecond),
                 Expires = DateTime.UtcNow.AddSeconds(_TokenExpiryTimeInSecond),
                 SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
                 Subject = new ClaimsIdentity(claims)
@@ -174,12 +183,23 @@ namespace BHYT.API.Controllers
                 }
 
                 //Check Accesstoken expired?
-                var utcExpireDate = long.Parse(tokenVerification.Claims.FirstOrDefault(e => e.Type == JwtRegisteredClaimNames.Exp).Value);
-                var expireDate = ConvertUnixTimeToDateTime(utcExpireDate);
-                if (expireDate > DateTime.UtcNow)
+            
+                var jwtToken = jwtTokenHandler.ReadJwtToken(dto.AccessToken);
+
+                if (jwtToken.Payload.Exp is not null && jwtToken.Payload.Exp is int expUnixSeconds)
                 {
-                    return Ok(new ApiResponse { Success = false, Message = "Access token has not yet expired" });
+                    var expDateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(expUnixSeconds);
+                    var expireDate =  expDateTimeOffset.UtcDateTime;
+                    if (expireDate > DateTime.UtcNow)
+                    {
+                        return Ok(new ApiResponse { Success = false, Message = "Access token has not yet expired" });
+                    }
                 }
+                else
+                {
+                    return NotFound("type values ​​do not match");
+                }
+
                 //Check refreshtoken exist in DB
                 var storedToken = _context.RefreshTokens.FirstOrDefault(x => x.Token == dto.RefreshToken);
                 if (storedToken == null)
@@ -194,6 +214,15 @@ namespace BHYT.API.Controllers
                 if (storedToken.IsRevoked)
                     return Ok(new ApiResponse { Success = false, Message = "Refresh token has been revoked" });
 
+                if(storedToken.ExpiredAt < DateTime.UtcNow)
+                {
+                    //revoke refreshToken token is expired
+                    storedToken.IsRevoked = true;
+                    _context.Update(storedToken);
+                    await _context.SaveChangesAsync();
+
+                    return Ok(new ApiResponse { Success = false, Message = "The refreshToken has expired, please login again!" });
+                }    
 
                 //Check AccesstokenID == AccessTokenId in refresh token
                 var jti = tokenVerification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
@@ -206,6 +235,7 @@ namespace BHYT.API.Controllers
                     });
                 }
 
+
                 //Update token is used
                 storedToken.IsRevoked = true;
                 storedToken.IsUsed = true;
@@ -213,7 +243,8 @@ namespace BHYT.API.Controllers
                 await _context.SaveChangesAsync();
 
 
-                var user = await _context.Users.SingleOrDefaultAsync(user => user.Username == storedToken.Username);
+                var user = await _context.Users.SingleOrDefaultAsync(user => user.AccountId == storedToken.AccountId);
+
                 if (user == null)
                 {
                     return Ok(new ApiResponse
@@ -250,6 +281,18 @@ namespace BHYT.API.Controllers
             dateTimeInterval.AddSeconds(utcExpireDate).ToUniversalTime();
 
             return dateTimeInterval;
+        }
+
+        private async Task<bool> checkAccount(User user)
+        {
+            var account = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == user.AccountId);
+            if(account == null) { return false; }
+            return true;
+        }
+        private bool checkNumberOfWrongLogin(LoginDTO dto)
+        {
+
+            return true;
         }
     }
 }

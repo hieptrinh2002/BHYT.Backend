@@ -7,7 +7,7 @@ namespace BHYT.API.Models.DbModels
     {
         [Key]
         public Guid Id { get; set; }
-        public string Username { get; set; } // acount id
+        public int AccountId { get; set; } // acount id
         public string Token { get; set; }
         public string AccessTokenId { get; set; }
         public bool IsUsed { get; set; }

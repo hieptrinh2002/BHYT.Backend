@@ -39,7 +39,7 @@ public partial class BHYTDbContext : DbContext
 
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
-
+    public virtual DbSet<Account> Accounts { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -85,39 +85,6 @@ public partial class BHYTDbContext : DbContext
                 Status = true
             }
         );
-
-        modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = 1,
-                    Guid = Guid.NewGuid(),
-                    RoleId = 1,
-                    Username = "customer1",
-                    Password = "customer123",
-                    Fullname = "customer123 User",
-                    Address = "123 ABC Street",
-                    Phone = "123456789",
-                    Birthday = new DateTime(1990, 1, 1),
-                    Sex = 1,
-                    Email = "customer1@gmail.com",
-                    StatusId = 1
-                },
-                new User
-                {
-                    Id = 2,
-                    Guid = Guid.NewGuid(),
-                    RoleId = 2,
-                    Username = "employee",
-                    Password = "employee123",
-                    Fullname = "employee123 User",
-                    Address = "456 XYZ Street",
-                    Phone = "987654321",
-                    Birthday = new DateTime(1995, 5, 5),
-                    Sex = 2,
-                    Email = "employee@gmail.com",
-                    StatusId = 1
-                }
-            ) ;
 
         modelBuilder.Entity<CustomerPolicy>().HasData(
             new CustomerPolicy

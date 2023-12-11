@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.Data;
 
 namespace BHYT.API.Controllers
@@ -27,31 +28,37 @@ namespace BHYT.API.Controllers
         [HttpPost]
         public async Task<IActionResult> register(RegisterDTO dto)
         {
-
-            var check = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
-            if (check != null)
+            var checkAccount = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == dto.Username);
+            if (checkAccount != null)
                 return BadRequest("User already exists");
-            check = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
-            if (check != null)
-                return BadRequest("Email already exists for other acount");
 
+            var checkEmail = _context.Users.Any(user => user.Email == dto.Email);
+            if (checkEmail)
+                return BadRequest("Email already exists for other account");
             try
             {
-                User newUser = new User() {
+                // add new account
+                Account account = new Account()
+                {
                     Username = dto.Username,
                     Password = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                    login_attempts = 0,
+                };
+                await _context.Accounts.AddAsync(account);
+                await _context.SaveChangesAsync();
+
+                // add new user
+                User newUser = new User()
+                {
                     Email = dto.Email,
                     Guid = new Guid(),
                     StatusId = 1,
+                    AccountId = account.Id,
                     RoleId = 2,  // default customer , empolyee can't sign up
-                   
                 };
-                // add new user
+
                 await _context.Users.AddAsync(newUser);
-
-                // add new 
                 await _context.SaveChangesAsync();
-
 
                 return Ok("User created successfully!");
             }
