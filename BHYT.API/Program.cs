@@ -43,6 +43,12 @@ builder.Services.AddAuthentication(options =>
     });
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("OpenConnect", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -57,6 +63,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseCors("OpenConnect");
 
 app.MapControllers();
 
