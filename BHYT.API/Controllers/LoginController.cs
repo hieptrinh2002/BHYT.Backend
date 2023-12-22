@@ -85,13 +85,12 @@ namespace BHYT.API.Controllers
                                 await _context.RefreshTokens.AddAsync(refreshTokenEntity);
                                 await _context.SaveChangesAsync();
 
-                                return Ok(new ApiResponseDTO
+                                return Ok(new
                                 {
-                                    Success = true,
                                     Message = "Genarate token successfully",
-                                    Data = new
+                                    Token = new
                                     {
-                                        Token = token,
+                                        AccessToken = token,
                                         IssuedAt = DateTime.UtcNow,
                                         ExpiredAt = expiration,
                                         RefreshToken = refreshToken,
@@ -124,8 +123,7 @@ namespace BHYT.API.Controllers
             {
                 Issuer = _configuration["Jwt:Issuer"],
                 Audience = _configuration["Jwt:Audience"],
-                //Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInSecond),
-                Expires = DateTime.UtcNow.AddSeconds(_TokenExpiryTimeInSecond),
+                Expires = DateTime.UtcNow.AddHours(_TokenExpiryTimeInHour),
                 SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
                 Subject = new ClaimsIdentity(claims)
             };
@@ -221,7 +219,7 @@ namespace BHYT.API.Controllers
                     _context.Update(storedToken);
                     await _context.SaveChangesAsync();
 
-                    return Ok(new ApiResponse { Success = false, Message = "The refreshToken has expired, please login again!" });
+                    return BadRequest(new ApiResponse { Success = false, Message = "The refreshToken has expired, please login again!" });
                 }    
 
                 //Check AccesstokenID == AccessTokenId in refresh token

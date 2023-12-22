@@ -60,7 +60,10 @@ namespace BHYT.API.Controllers
                 await _context.Users.AddAsync(newUser);
                 await _context.SaveChangesAsync();
 
-                return Ok("User created successfully!");
+                return Ok( new
+                {
+                    Message = "register successfully!"
+                });
             }
             catch (Exception ex)
             {

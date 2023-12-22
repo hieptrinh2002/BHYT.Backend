@@ -24,6 +24,7 @@ namespace BHYT.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
             var listUser = await _context.Users
@@ -31,6 +32,34 @@ namespace BHYT.API.Controllers
                 .ToListAsync();
 
             return Ok(_mapper.Map<List<UserDTO>>(listUser));
+        }
+
+        [HttpGet("role")]
+        public async Task<IActionResult> GetUserRole(string username)
+        {
+            try
+            {
+                var userRole = (from user in _context.Users
+                                join role in _context.Roles on user.Id equals role.Id
+                                select role.Name).FirstOrDefault();
+
+                if (userRole != "")
+                {
+                    return Ok(new
+                    {
+                        role = userRole
+                    });
+
+                }
+                return NotFound("user role can't be found");
+            }
+            catch(Exception ex)
+            {
+                return Conflict(new
+                {
+                    Message = "user role can't be found"
+                });
+            }
         }
     }
 }
