@@ -41,9 +41,11 @@ namespace BHYT.API.Controllers
             {
                 var userRole = (from user in _context.Users
                                 join role in _context.Roles on user.Id equals role.Id
+                                join account in _context.Accounts on user.AccountId equals account.Id
+                                where account.Username == username
                                 select role.Name).FirstOrDefault();
 
-                if (userRole != "")
+                if (userRole != "" || userRole != null)
                 {
                     return Ok(new
                     {
@@ -51,11 +53,11 @@ namespace BHYT.API.Controllers
                     });
 
                 }
-                return NotFound("user role can't be found");
+                return NotFound(new ApiResponse { Message = "user role can't be found" });
             }
             catch(Exception ex)
             {
-                return Conflict(new
+                return Conflict(new ApiResponseDTO
                 {
                     Message = "user role can't be found"
                 });

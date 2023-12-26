@@ -30,11 +30,13 @@ namespace BHYT.API.Controllers
         {
             var checkAccount = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == dto.Username);
             if (checkAccount != null)
-                return BadRequest("User already exists");
+                return BadRequest(
+                    new ApiResponse { Message = "User already exists" }
+                );
 
             var checkEmail = _context.Users.Any(user => user.Email == dto.Email);
             if (checkEmail)
-                return BadRequest("Email already exists for other account");
+                return BadRequest(new ApiResponse { Message = "Email already exists for other account" });
             try
             {
                 // add new account

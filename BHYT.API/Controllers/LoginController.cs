@@ -97,15 +97,15 @@ namespace BHYT.API.Controllers
                                     }
                                 });
                             }
-                            return BadRequest("invalid password !");
+                            return BadRequest(new ApiResponse { Message = "invalid password !" });
                         }
 
                     }
 
-                    return NotFound("Invalid credentials");
+                    return NotFound(new ApiResponse { Message = "Invalid credentials" });
                 }
 
-                return BadRequest("Username, Password are required");
+                return BadRequest(new ApiResponse { Message = "Username, Password are required" });
 
             }
             catch (Exception ex)
@@ -143,7 +143,7 @@ namespace BHYT.API.Controllers
             }
         }
 
-        [HttpPost("RenewToken")]
+        [HttpPost("renew-token")]
         public async Task<IActionResult> RenewToken(TokenDTO dto)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -195,7 +195,7 @@ namespace BHYT.API.Controllers
                 }
                 else
                 {
-                    return NotFound("type values ​​do not match");
+                    return NotFound( new ApiResponse { Message = "type values ​​do not match" });
                 }
 
                 //Check refreshtoken exist in DB
@@ -270,27 +270,6 @@ namespace BHYT.API.Controllers
             catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
-        }
-
-        private DateTime ConvertUnixTimeToDateTime(long utcExpireDate)
-        {
-            var dateTimeInterval = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTimeInterval.AddSeconds(utcExpireDate).ToUniversalTime();
-
-            return dateTimeInterval;
-        }
-
-        private async Task<bool> checkAccount(User user)
-        {
-            var account = await _context.Accounts.FirstOrDefaultAsync(u => u.Id == user.AccountId);
-            if(account == null) { return false; }
-            return true;
-        }
-        private bool checkNumberOfWrongLogin(LoginDTO dto)
-        {
-
-            return true;
         }
     }
 }
