@@ -9,6 +9,7 @@ namespace BHYT.API.Utilities
         public AutoMapper() {
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<InsurancePayment, InsurancePaymentDTO>().ReverseMap();
+            CreateMap<CustomerPolicy, CustomerPolicyDTO>().ReverseMap();
         }
     }
 }
