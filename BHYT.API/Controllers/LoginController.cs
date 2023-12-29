@@ -94,6 +94,10 @@ namespace BHYT.API.Controllers
                                         IssuedAt = DateTime.UtcNow,
                                         ExpiredAt = expiration,
                                         RefreshToken = refreshToken,
+                                    },
+                                    Account = new {
+                                        account.Id,
+                                        account.Username,
                                     }
                                 });
                             }
