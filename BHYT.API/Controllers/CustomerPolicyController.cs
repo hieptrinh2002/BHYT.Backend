@@ -51,5 +51,42 @@ namespace BHYT.API.Controllers
                 });
             }
         }
+
+        [HttpDelete("reject")]
+        public async Task<ActionResult> RejectInsurancePolicy(int policyId)
+        {
+            CustomerPolicy customerPolicy;
+            try
+            {
+                customerPolicy = _context.CustomerPolicies.Where(x => x.Id == policyId).FirstOrDefault();
+                if (customerPolicy == null)
+                {
+                    return Conflict(new ApiResponseDTO
+                    {
+                        Message = "Chính sách không tồn tại trong hệ thống !"
+                    });
+
+                }
+                //_context.CustomerPolicies.Remove(customerPolicy);
+                customerPolicy.Status = true;
+                await _context.SaveChangesAsync();
+
+                return Ok(new ApiResponseDTO
+                {
+                    Message = "Xoá chính sách thành công !"
+                });
+            }
+            catch
+            {
+                return Conflict(new ApiResponseDTO
+                {
+                    Message = "Lỗi xoá thông tin chính sách!"
+                });
+            }
+            finally
+            {
+                customerPolicy = null;
+            }
+        }
     }
 }

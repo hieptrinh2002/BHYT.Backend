@@ -10,6 +10,8 @@ namespace BHYT.API.Utilities
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<InsurancePayment, InsurancePaymentDTO>().ReverseMap();
             CreateMap<CustomerPolicy, CustomerPolicyDTO>().ReverseMap();
+            CreateMap<HealthHistory, HealthHistoryDTO>().ReverseMap();
+
         }
     }
 }
