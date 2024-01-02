@@ -14,13 +14,11 @@ namespace BHYT.API.Controllers
     public class CustomerPolicyController : ControllerBase
     {
         private readonly BHYTDbContext _context;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public CustomerPolicyController(BHYTDbContext context, IConfiguration configuration, IMapper mapper)
+        public CustomerPolicyController(BHYTDbContext context, IMapper mapper)
         {
             _context = context;
-            _configuration = configuration;
             _mapper = mapper;
         }
 
