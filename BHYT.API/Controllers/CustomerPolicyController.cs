@@ -23,14 +23,14 @@ namespace BHYT.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCustomerPolicy(int id)
+        public IActionResult GetCustomerPolicy(int id)
         {
             try
             {
-                var customerPolicy = await _context.CustomerPolicies
+                var customerPolicy = _context.CustomerPolicies
                  .Where(policy => policy.Id == id)
                  .ProjectTo<CustomerPolicyDTO>(_mapper.ConfigurationProvider)
-                 .FirstOrDefaultAsync();
+                 .FirstOrDefault();
 
                 if (customerPolicy != null)
                 {

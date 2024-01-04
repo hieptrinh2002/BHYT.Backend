@@ -4,7 +4,6 @@ using BHYT.API.Models.DbModels;
 using BHYT.API.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BHYT.API.Controllers
 {
@@ -15,6 +14,7 @@ namespace BHYT.API.Controllers
     {
         private readonly BHYTDbContext _context;
         private readonly IMapper _mapper;
+
         public InsurancePaymentController(BHYTDbContext context, IMapper mapper)
         {
             _context = context;
@@ -22,14 +22,14 @@ namespace BHYT.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserInsurancePayment(int id)
+        public IActionResult GetUserInsurancePayment(int id)
         {
             try
             {
-                var insurancePayments = await _context.InsurancePayments
+                var insurancePayments = _context.InsurancePayments
                        .Where(payment => payment.CustomerId == id)
                        .ProjectTo<InsurancePaymentDTO>(_mapper.ConfigurationProvider)
-                       .ToListAsync();
+                       .ToList();
 
                 if (insurancePayments.Any())
                 {
