@@ -16,11 +16,9 @@ namespace BHYT.API.Controllers
     public class RegisterController : ControllerBase
     {
         private readonly BHYTDbContext _context ;
-        private IConfiguration _configuration;
         private readonly IMapper _mapper ;
-        public RegisterController(BHYTDbContext context, IConfiguration configuration, IMapper mapper)
+        public RegisterController(BHYTDbContext context,  IMapper mapper)
         {
-            _configuration = configuration;
             _context = context;
             _mapper = mapper;
         }
