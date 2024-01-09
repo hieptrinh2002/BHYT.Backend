@@ -5,6 +5,7 @@ using BHYT.API.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BHYT.API.Controllers
 {
@@ -68,7 +69,7 @@ namespace BHYT.API.Controllers
 
                 }
                 //_context.CustomerPolicies.Remove(customerPolicy);
-                customerPolicy.Status = true;
+                customerPolicy.Status = null;
                 await _context.SaveChangesAsync();
 
                 return Ok(new ApiResponseDTO
@@ -88,5 +89,61 @@ namespace BHYT.API.Controllers
                 customerPolicy = null;
             }
         }
+
+        [HttpPost("Issue")]
+        public async Task<ActionResult> IssuePolicy([FromBody] InsurancePolicyIssueDTO policyIssue)
+        {
+            CustomerPolicy customerPolicy;
+            try
+            {
+                customerPolicy = _context.CustomerPolicies.Where(x => x.Id == policyIssue.policyId).FirstOrDefault();
+                if (customerPolicy == null)
+                {
+                    return Conflict(new ApiResponseDTO
+                    {
+                        Message = "Chính sách chưa tồn tại trong hệ thống, người dùng chưa đăng kí chính sách bảo hiểm !"
+                    });
+
+                }
+                _mapper.Map(policyIssue, customerPolicy); // Ánh xạ từ DTO sang model
+
+                customerPolicy.Status = true;
+                // customerPolicy.PremiumAmount = tính toán ()
+                // customerPolicy.DeductibleAmount = tính toán ()
+                //insert thông tin phê duyệt
+
+                var policyApproval = new PolicyApproval();
+                policyApproval.PolicyId = policyIssue.policyId;
+                policyApproval.ApprovalDate = DateTime.Now;
+                policyApproval.StatusId = 1;
+                policyApproval.Guid = new Guid();
+                policyApproval.EmployeeId = (from user in _context.Users
+                                             join account in _context.Accounts on user.AccountId equals account.Id
+                                             where account.Username == User.FindFirstValue(ClaimTypes.Name)
+                                             select user.Id).FirstOrDefault();
+                _context.PolicyApprovals.Add(policyApproval);
+
+                await _context.SaveChangesAsync();
+
+
+                return Ok(new ApiResponseDTO
+                {
+                    Message = "Phát hành chính sách thành công !"
+                });
+            }
+            catch
+            {
+                return Conflict(new ApiResponseDTO
+                {
+                    Message = "Lỗi phát hành chính sách bảo hiểm !"
+                });
+            }
+            finally
+            {
+                customerPolicy = null;
+            }
+        }
+
+
     }
 }

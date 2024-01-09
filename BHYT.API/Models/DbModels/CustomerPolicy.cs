@@ -33,7 +33,7 @@ public partial class CustomerPolicy
 
     public string? Description { get; set; }
 
-    public bool? Status { get; set; }
+    public bool? Status { get; set; } // true: duyệt r , false: chưa duyệt , null: loại bỏ
 
     public string? Company { get; set; }
 }

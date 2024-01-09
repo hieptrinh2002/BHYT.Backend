@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace BHYT.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class InsuranceApprovalController : ControllerBase
     {
         private readonly BHYTDbContext _context;
@@ -24,8 +25,55 @@ namespace BHYT.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("list")]
-        
+
+        [HttpGet("approved-policy-detail")]
+        //[Authorize(Roles = "employee")]
+        public async Task<ActionResult<IEnumerable<ApprovedPolicyDetailDTO>>> ApprovedPolicyDetail()
+        {
+            try
+            {
+                var query = from customerPolicy in _context.CustomerPolicies
+                            where customerPolicy.Status == true
+                            join customer in _context.Users on customerPolicy.CustomerId equals customer.Id
+                            join insurance in _context.Insurances on customerPolicy.InsuranceId equals insurance.Id
+                            join approval in _context.PolicyApprovals on customerPolicy.Id equals approval.PolicyId
+                            select new
+                            {
+                                customer,
+                                insurance,
+                                customerPolicy,
+                                approval
+                            };
+
+                List<ApprovedPolicyDetailDTO> Result = await query.Select((x) => new ApprovedPolicyDetailDTO
+                {
+                    guid = Guid.NewGuid(),
+                    policyId = x.customerPolicy.Id,
+                    customerId = x.customer.Id,
+                    customerName = x.customer.Fullname,
+                    insuranceId = x.insurance.Id,
+                    insuranceName = x.insurance.Name,
+                    paymentOpption = x.customerPolicy.PaymentOption == true? "Tháng" : "Năm",
+                    approvalDate = x.approval.ApprovalDate.ToString(),
+                    employeeName = _context.Users.Where(ele => ele.Id == x.approval.EmployeeId)
+                                                 .Select(ele => ele.Fullname)
+                                                 .FirstOrDefault(),
+                   
+                }).ToListAsync();
+
+                return Ok(Result);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new ApiResponseDTO
+                {
+                    Message = "Lấy danh sách thông tin bảo hiểm đã phê duyệt thất bại !"
+                });
+            }
+        }
+
+        [HttpGet("request-list")]
+        //[Authorize(Roles = "employee")]
         public async Task<ActionResult<IEnumerable<InsurancePolicyApprovalDTO>>> GetAllInsuranceApproval()
         {
             try
@@ -51,6 +99,8 @@ namespace BHYT.API.Controllers
                     CustomerPhone = x.customer.Phone,
                     CustomerEmail = x.customer.Email,
                     CustomerAdrress = x.customer.Address,
+                    StartDate = x.customerPolicy.StartDate,
+                    EndDate = x.customerPolicy.EndDate,
                     InsuranceID = x.customerPolicy.InsuranceId,
                     InsuranceName = x.insurance.Name,
                     CreatedDate = x.customerPolicy.CreatedDate.ToString(),
