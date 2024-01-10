@@ -24,4 +24,5 @@ public partial class HealthHistory
     public string? HospitalNumber { get; set; }
 
     public string? Condition { get; set; }
+
 }
