@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BHYT.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -23,11 +23,12 @@ namespace BHYT.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        [Authorize(Roles = "admin")]
+        [HttpGet("customer")]
+        //[Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
             var listUser = await _context.Users
+                .Where(x=> x.RoleId == 2)
                 .OrderBy(x => x.Id)
                 .ToListAsync();
 

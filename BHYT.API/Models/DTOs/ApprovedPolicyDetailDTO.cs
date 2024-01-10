@@ -14,5 +14,13 @@
         public string? paymentOpption{ get; set; }
         public string? approvalDate { get; set; }
         public string? employeeName { get; set; }
+
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+
+        
+
+
     }
 }

@@ -11,7 +11,7 @@ namespace BHYT.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class HealthHistoryController : ControllerBase
     {
         private readonly BHYTDbContext _context;

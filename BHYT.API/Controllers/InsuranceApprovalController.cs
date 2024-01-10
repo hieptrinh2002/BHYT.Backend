@@ -11,7 +11,7 @@ namespace BHYT.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class InsuranceApprovalController : ControllerBase
     {
         private readonly BHYTDbContext _context;
@@ -58,6 +58,9 @@ namespace BHYT.API.Controllers
                     employeeName = _context.Users.Where(ele => ele.Id == x.approval.EmployeeId)
                                                  .Select(ele => ele.Fullname)
                                                  .FirstOrDefault(),
+                    StartDate = x.customerPolicy.StartDate,
+                    EndDate = x.customerPolicy.EndDate,
+                    
                    
                 }).ToListAsync();
 
