@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using BHYT.API.Models.DTOs;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Stripe;
 
 namespace BHYT.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -23,16 +24,59 @@ namespace BHYT.API.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("update-status")]
+        public async Task<ActionResult> updateStatus(UpdateUserStatusDTO dto)
+        {
+            try
+            {
+                var user = await _context.Users
+               .Where(x => x.Id == dto.customerId)
+               .FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    return NotFound(new ApiResponseDTO
+                    {
+                        Message = " không tìm thấy user để cập nhật !"
+                    });
+                }
+                user.StatusId = dto.newStatus;
+                _context.SaveChanges();
+
+                return Ok(new ApiResponseDTO { Message = "Cập nhật trạng thái thành công !" });
+
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new ApiResponseDTO
+                {
+                    Message = " lỗi cập nhật trạng thái user !",
+                });
+            }
+        }
+
+
+
         [HttpGet("customer")]
         //[Authorize(Roles = "admin")]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            var listUser = await _context.Users
-                .Where(x=> x.RoleId == 2)
-                .OrderBy(x => x.Id)
-                .ToListAsync();
+            try
+            {
+                var listUser = await _context.Users
+               .Where(x => x.RoleId == 2)
+               .OrderBy(x => x.Id)
+               .ToListAsync();
 
-            return Ok(_mapper.Map<List<UserDTO>>(listUser));
+                return Ok(_mapper.Map<List<UserDTO>>(listUser));
+            }
+            catch (Exception ex) {
+                return NotFound(new ApiResponseDTO
+                {
+                    Message = " lỗi lấy danh sách customer",
+                });
+            }
+           
         }
 
         [HttpGet("role")]

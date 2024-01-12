@@ -142,6 +142,27 @@ namespace BHYT.API.Controllers
             }
         }
 
+        [HttpGet("list-policy")]
+        public async Task<ActionResult<IEnumerable<CustomerPolicyDTO>>> GetAllPolicyOfUserById(int id)
+        {
+            try
+            {
+                var listUser = await _context.CustomerPolicies
+               .Where(x => x.CustomerId == id)
+               .OrderBy(x => x.Id)
+               .ToListAsync();
 
+                return Ok(_mapper.Map<List<CustomerPolicyDTO>>(listUser));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new ApiResponseDTO
+                {
+                    Message = " lỗi lấy danh sách chính sách bảo hiểm của khách hàng ",
+                });
+            }
+        }
     }
 }
+
+
