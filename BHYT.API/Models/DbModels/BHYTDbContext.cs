@@ -71,7 +71,12 @@ public partial class BHYTDbContext : DbContext
                 Date = DateTime.Now,
                 Amount = 1000.50,
                 Note = "Bonus payment",
-                Status = true
+                Status = true,
+                HoptitalName="Từ Dũ",
+                HopitalCode="294903456",
+                DateRequest= DateTime.Now,
+                UsedServices="all",
+                GetOption= 1
             },
             new Compensation
             {
@@ -82,7 +87,13 @@ public partial class BHYTDbContext : DbContext
                 Date = DateTime.Now,
                 Amount = 750.25,
                 Note = "Incentive payment",
-                Status = true
+                Status = true,
+                HoptitalName = "Từ Dũ",
+                HopitalCode = "294903456",
+                DateRequest = DateTime.Now,
+                UsedServices = "all",
+                GetOption = 1
+
             }
         );
 

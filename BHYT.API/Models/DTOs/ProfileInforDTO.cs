@@ -1,18 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BHYT.API.Models.DbModels
+﻿namespace BHYT.API.Models.DTOs
 {
-    public class User
+    public class ProfileInforDTO
     {
-        public User()
-        {
-             
-        }
-        [Key]
         public int Id { get; set; }
 
-        public Guid? Guid { get; set; }
- 
         public string? Fullname { get; set; }
 
         public string? Address { get; set; }
@@ -24,12 +15,6 @@ namespace BHYT.API.Models.DbModels
         public int? Sex { get; set; }
 
         public string? Email { get; set; }
-
-        public int? StatusId { get; set; }
-
-        public int RoleId { get; set; }
-
-        public int AccountId { get; set; }  
 
         public string? BankNumber { get; set; }
 

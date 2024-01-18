@@ -8,7 +8,7 @@ using Stripe;
 
 namespace BHYT.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -55,7 +55,68 @@ namespace BHYT.API.Controllers
             }
         }
 
+        [HttpPost("update-profile")]
+        public async Task<ActionResult> updateStatus(ProfileInforDTO dto)
+        {
+            try
+            {
+                var user = await _context.Users
+               .Where(x => x.Id == dto.Id)
+               .FirstOrDefaultAsync();
 
+                if (user == null)
+                {
+                    return NotFound(new ApiResponseDTO
+                    {
+                        Message = " không tìm thấy user để cập nhật !"
+                    });
+                }
+
+                // Ánh xạ từ dto sang user
+                _mapper.Map(dto, user);
+
+                _context.SaveChanges();
+
+                return Ok(new ApiResponseDTO { Message = "Cập nhật thành công !" });
+
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new ApiResponseDTO
+                {
+                    Message = " lỗi cập nhật profile !",
+                });
+            }
+        }
+
+        [HttpGet("get-profile")]
+        public async Task<ActionResult<ProfileInforDTO>> get(int accountId)
+        {
+            try
+            {
+                var user = await _context.Users
+               .Where(x => x.AccountId == accountId)
+               .FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    return NotFound(new ApiResponseDTO
+                    {
+                        Message = " không tìm thấy user !"
+                    });
+                }
+                
+                return Ok(_mapper.Map<ProfileInforDTO>(user));
+
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new ApiResponseDTO
+                {
+                    Message = " lỗi lấy thông tin user !",
+                });
+            }
+        }
 
         [HttpGet("customer")]
         //[Authorize(Roles = "admin")]
