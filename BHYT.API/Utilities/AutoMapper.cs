@@ -16,6 +16,8 @@ namespace BHYT.API.Utilities
                 .ForMember(dest => dest.CoverageType, opt => opt.MapFrom(src => "Bảo hiểm sức khỏe cơ bản")) // Gán giá trị mặc định cho CoverageType
                 .ForMember(dest => dest.LatestUpdate, opt => opt.MapFrom(src => DateTime.Now)) // Gán giá trị hiện tại cho LatestUpdate
                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => "ABC Insurance"));
+            CreateMap<Compensation, CompensationDTO>().ReverseMap()
+                .ForMember(dest => dest.Guid, opt => opt.MapFrom(src => Guid.NewGuid()));
 
         }
     }
