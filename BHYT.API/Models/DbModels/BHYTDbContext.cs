@@ -41,6 +41,9 @@ public partial class BHYTDbContext : DbContext
 
     public virtual DbSet<Account> Accounts { get; set; }
 
+    public virtual DbSet<HealthIndicator> HealthIndicators { get; set; }
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -54,7 +57,37 @@ public partial class BHYTDbContext : DbContext
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    { 
+        modelBuilder.Entity<HealthIndicator>().HasData(
+           new HealthIndicator
+           {
+               Id = 1,
+               Guid = Guid.NewGuid(),
+               CustomerId = 1,
+               Height = 170,
+               Weight = 65,
+               Cholesterol = 5.2f,
+               BMI = 23.4f,
+               BPM = 80,
+               RespiratoryRate = 18,
+               Diseases = "None",
+               LastestUpdate = DateTime.Now
+           },
+           new HealthIndicator
+           {
+               Id = 2,
+               Guid = Guid.NewGuid(),
+               CustomerId = 2,
+               Height = 165,
+               Weight = 60,
+               Cholesterol = 4.8f,
+               BMI = 22.1f,
+               BPM = 75,
+               RespiratoryRate = 16,
+               Diseases = "None",
+               LastestUpdate = DateTime.Now
+           }
+       );
 
         modelBuilder.Entity<Benefit>().HasData(
             new Benefit { Id = 1, Guid = Guid.NewGuid(), Name = "Health Insurance", Description = "Coverage for medical expenses" },
