@@ -9,7 +9,8 @@ namespace BHYT.API.Utilities
         public AutoMapper() {
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<User, ProfileInforDTO>().ReverseMap();
-            CreateMap<HealthIndicator, HealthIndicatorDTO>().ReverseMap();
+            CreateMap<HealthIndicator, HealthIndicatorDTO>().ReverseMap()
+                 .ForMember(dest => dest.Guid, opt => opt.MapFrom(src => Guid.NewGuid()));
             CreateMap<InsurancePayment, InsurancePaymentDTO>().ReverseMap();
             CreateMap<CustomerPolicy, CustomerPolicyDTO>().ReverseMap();
             CreateMap<HealthHistory, HealthHistoryDTO>().ReverseMap();

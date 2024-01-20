@@ -22,7 +22,7 @@ namespace BHYT.API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<HealthIndicatorDTO>> get(int userId)
+        public async Task<ActionResult<HealthIndicatorDTO>> GetHealthIndicators(int userId)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace BHYT.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> updateHealthIndicator(HealthIndicatorDTO dto)
+        public async Task<ActionResult> UpdateHealthIndicator(HealthIndicatorDTO dto)
         {
             try
             {
@@ -66,9 +66,9 @@ namespace BHYT.API.Controllers
                         Message = " không tìm thấy thông tin chỉ số sức khỏe !"
                     });
                 }
-
                 // Ánh xạ từ dto sang healthIndicator
                 _mapper.Map(dto, healthIndicator);
+                healthIndicator.LastestUpdate = DateTime.Now;
 
                 _context.SaveChanges();
 
