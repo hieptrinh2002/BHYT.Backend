@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using BHYT.API.Models.DbModels;
 using BHYT.API.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BHYT.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class HealthIndicatorController : ControllerBase
