@@ -25,7 +25,7 @@ namespace BHYT.API.Controllers
             _configuration = configuration;
         }
 
-        public IEnumerable<Claim> GetClaims(User user)
+        private IEnumerable<Claim> GetClaims(User user)
         {
 
             var roleName =  _context.Roles
@@ -79,7 +79,8 @@ namespace BHYT.API.Controllers
                                     IsUsed = false,
                                     IsRevoked = false,
                                     IssuedAt = DateTime.UtcNow,
-                                    ExpiredAt = DateTime.UtcNow.AddHours(Convert.ToInt64(_configuration["Jwt:RefreshTokenExpiryTimeInHour"]))
+                                    //ExpiredAt = DateTime.UtcNow.AddHours(Convert.ToInt64(_configuration["Jwt:RefreshTokenExpiryTimeInHour"]))
+                                    ExpiredAt = DateTime.UtcNow.AddHours(10)
                                 };
 
                                 await _context.RefreshTokens.AddAsync(refreshTokenEntity);
@@ -98,8 +99,7 @@ namespace BHYT.API.Controllers
                                     Account = new {
                                         account.Id,
                                         account.Username,
-                                    },
-                                    userId = user.Id
+                                    }
                                 });
                             }
                             return BadRequest(new ApiResponse { Message = "invalid password !" });
@@ -118,7 +118,7 @@ namespace BHYT.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-        public (string token, DateTime expire, string tokenId) GenerateToken(IEnumerable<Claim> claims)
+        private (string token, DateTime expire, string tokenId) GenerateToken(IEnumerable<Claim> claims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var _TokenExpiryTimeInHour = Convert.ToInt64(_configuration["Jwt:TokenExpiryTimeInHour"]);
@@ -137,7 +137,7 @@ namespace BHYT.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return (tokenHandler.WriteToken(token), token.ValidTo, token.Id);
         }
-        public string GenerateRefreshToken()
+        private string GenerateRefreshToken()
         {
             var random = new byte[32];
             using (var rng = RandomNumberGenerator.Create())

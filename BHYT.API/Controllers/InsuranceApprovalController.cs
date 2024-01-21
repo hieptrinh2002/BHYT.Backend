@@ -15,10 +15,14 @@ namespace BHYT.API.Controllers
     public class InsuranceApprovalController : ControllerBase
     {
         private readonly BHYTDbContext _context;
+        private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public InsuranceApprovalController(BHYTDbContext context)
+        public InsuranceApprovalController(BHYTDbContext context, IConfiguration configuration, IMapper mapper)
         {
             _context = context;
+            _configuration = configuration;
+            _mapper = mapper;
         }
 
 

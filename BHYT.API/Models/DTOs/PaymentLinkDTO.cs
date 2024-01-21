@@ -6,7 +6,5 @@
 
         public string? ProductName { get; set; }
 
-        public string? PaymentOption { get; set; }
-
     }
 }
