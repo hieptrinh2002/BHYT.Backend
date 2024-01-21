@@ -146,7 +146,7 @@ namespace BHYT.API.Controllers
             try
             {
                 var userRole = (from user in _context.Users
-                                join role in _context.Roles on user.Id equals role.Id
+                                join role in _context.Roles on user.RoleId equals role.Id
                                 join account in _context.Accounts on user.AccountId equals account.Id
                                 where account.Username == username
                                 select role.Name).FirstOrDefault();
