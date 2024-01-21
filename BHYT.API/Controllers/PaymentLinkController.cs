@@ -17,7 +17,7 @@ namespace BHYT.API.Controllers
 
         private readonly BHYTDbContext _context;
 
-        public PaymentLinkController(BHYTDbContext context, IMapper mapper)
+        public PaymentLinkController(BHYTDbContext context)
         {
             _context = context;
         }
@@ -84,7 +84,6 @@ namespace BHYT.API.Controllers
                 var options = new SubscriptionUpdateOptions { CancelAtPeriodEnd = true };
                 var service = new SubscriptionService();
 
-                service.Update(subscriptionId, options);
 
                 // Get the insurance payment with the subscription ID
                 var insurancePayment = _context.InsurancePayments
@@ -99,6 +98,7 @@ namespace BHYT.API.Controllers
                     _context.SaveChanges();
                 }
 
+                service.Update(subscriptionId, options);
                 return Ok(new { status = "Subscription will be cancelled at the end of the current period" });
             }
             catch (StripeException e)

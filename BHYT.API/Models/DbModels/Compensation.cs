@@ -14,7 +14,7 @@ public partial class Compensation
     public int? EmployeeId { get; set; }
 
     public DateTime? Date { get; set; }
-
+    
     public double? Amount { get; set; }
 
     public string HoptitalName { get; set; }

@@ -6,7 +6,7 @@ namespace BHYT.API.Models.DbModels;
 
 public partial class BHYTDbContext : DbContext
 {
-    public BHYTDbContext(DbContextOptions<BHYTDbContext> options) : base(options)
+    public BHYTDbContext(DbContextOptions<BHYTDbContext> options): base(options)
     {
     }
     public virtual DbSet<Benefit> Benefits { get; set; }
@@ -57,7 +57,7 @@ public partial class BHYTDbContext : DbContext
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    { 
         modelBuilder.Entity<HealthIndicator>().HasData(
            new HealthIndicator
            {
@@ -105,11 +105,11 @@ public partial class BHYTDbContext : DbContext
                 Amount = 1000.50,
                 Note = "Bonus payment",
                 Status = true,
-                HoptitalName = "Từ Dũ",
-                HopitalCode = "294903456",
-                DateRequest = DateTime.Now,
-                UsedServices = "all",
-                GetOption = 1
+                HoptitalName="Từ Dũ",
+                HopitalCode="294903456",
+                DateRequest= DateTime.Now,
+                UsedServices="all",
+                GetOption= 1
             },
             new Compensation
             {
@@ -170,7 +170,7 @@ public partial class BHYTDbContext : DbContext
                 Company = "XYZ Insurance"
             }
         );
-
+       
         modelBuilder.Entity<HealthHistory>().HasData(
             new HealthHistory
             {

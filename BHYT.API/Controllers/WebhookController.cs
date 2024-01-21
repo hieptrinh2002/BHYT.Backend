@@ -11,7 +11,7 @@ namespace BHYT.API.Controllers
     {
         private readonly BHYTDbContext _context;
 
-        public WebhookController(BHYTDbContext context, IMapper mapper)
+        public WebhookController(BHYTDbContext context)
         {
             _context = context;
         }
@@ -57,7 +57,7 @@ namespace BHYT.API.Controllers
                         }
 
                         // Get the customer's payment
-                        var insurancePayment = _context.InsurancePayments.OrderBy(payment => payment.Id)
+                        var insurancePayment = _context.InsurancePayments.OrderBy(payment=>payment.Id)
                             .LastOrDefault(payment => payment.CustomerId == customerId);
 
                         if (insurancePayment != null)

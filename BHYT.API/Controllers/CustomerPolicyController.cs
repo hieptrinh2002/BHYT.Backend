@@ -147,11 +147,13 @@ namespace BHYT.API.Controllers
         {
             try
             {
+
                 var policies = await _context.CustomerPolicies
                               .Where(x => x.CustomerId == id)
                               .OrderBy(x => x.Id)
                               .ToListAsync();
                 return Ok(_mapper.Map<List<CustomerPolicyDTO>>(policies));
+
             }
             catch (Exception ex)
             {

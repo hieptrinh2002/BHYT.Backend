@@ -4,10 +4,9 @@ using BHYT.API.Models.DTOs;
 
 namespace BHYT.API.Utilities
 {
-    public class AutoMapper : Profile
+    public class AutoMapper: Profile
     {
-        public AutoMapper()
-        {
+        public AutoMapper() {
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<User, ProfileInforDTO>().ReverseMap();
             CreateMap<HealthIndicator, HealthIndicatorDTO>().ReverseMap()

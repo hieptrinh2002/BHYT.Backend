@@ -105,7 +105,7 @@ namespace BHYT.API.Controllers
                         Message = " không tìm thấy user !"
                     });
                 }
-
+                
                 return Ok(_mapper.Map<ProfileInforDTO>(user));
 
             }
@@ -131,14 +131,13 @@ namespace BHYT.API.Controllers
 
                 return Ok(_mapper.Map<List<UserDTO>>(listUser));
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 return NotFound(new ApiResponseDTO
                 {
                     Message = " lỗi lấy danh sách customer",
                 });
             }
-
+           
         }
 
         [HttpGet("role")]
@@ -152,7 +151,7 @@ namespace BHYT.API.Controllers
                                 where account.Username == username
                                 select role.Name).FirstOrDefault();
 
-                if (userRole != "" || userRole != null)
+                if (userRole != "" && userRole != null)
                 {
                     return Ok(new
                     {
@@ -162,7 +161,7 @@ namespace BHYT.API.Controllers
                 }
                 return NotFound(new ApiResponse { Message = "user role can't be found" });
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return Conflict(new ApiResponseDTO
                 {

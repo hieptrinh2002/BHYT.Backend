@@ -25,7 +25,7 @@ namespace BHYT.API.Controllers
             _configuration = configuration;
         }
 
-        private IEnumerable<Claim> GetClaims(User user)
+        public IEnumerable<Claim> GetClaims(User user)
         {
 
             var roleName =  _context.Roles
@@ -118,7 +118,7 @@ namespace BHYT.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
-        private (string token, DateTime expire, string tokenId) GenerateToken(IEnumerable<Claim> claims)
+        public (string token, DateTime expire, string tokenId) GenerateToken(IEnumerable<Claim> claims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var _TokenExpiryTimeInHour = Convert.ToInt64(_configuration["Jwt:TokenExpiryTimeInHour"]);
@@ -137,7 +137,7 @@ namespace BHYT.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return (tokenHandler.WriteToken(token), token.ValidTo, token.Id);
         }
-        private string GenerateRefreshToken()
+        public string GenerateRefreshToken()
         {
             var random = new byte[32];
             using (var rng = RandomNumberGenerator.Create())

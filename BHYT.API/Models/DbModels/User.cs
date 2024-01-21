@@ -6,13 +6,13 @@ namespace BHYT.API.Models.DbModels
     {
         public User()
         {
-
+             
         }
         [Key]
         public int Id { get; set; }
 
         public Guid? Guid { get; set; }
-
+ 
         public string? Fullname { get; set; }
 
         public string? Address { get; set; }
@@ -29,7 +29,7 @@ namespace BHYT.API.Models.DbModels
 
         public int RoleId { get; set; }
 
-        public int AccountId { get; set; }
+        public int AccountId { get; set; }  
 
         public string? BankNumber { get; set; }
 
