@@ -11,7 +11,7 @@ namespace BHYT.API.Controllers
     {
         private readonly BHYTDbContext _context;
 
-        public WebhookController(BHYTDbContext context, IMapper mapper)
+        public WebhookController(BHYTDbContext context)
         {
             _context = context;
         }
