@@ -151,7 +151,7 @@ namespace BHYT.API.Controllers
                                 where account.Username == username
                                 select role.Name).FirstOrDefault();
 
-                if (userRole != "" || userRole != null)
+                if (userRole != "" && userRole != null)
                 {
                     return Ok(new
                     {

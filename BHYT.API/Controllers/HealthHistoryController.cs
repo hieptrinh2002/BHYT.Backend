@@ -15,13 +15,11 @@ namespace BHYT.API.Controllers
     public class HealthHistoryController : ControllerBase
     {
         private readonly BHYTDbContext _context;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public HealthHistoryController(BHYTDbContext context, IConfiguration configuration, IMapper mapper)
+        public HealthHistoryController(BHYTDbContext context,  IMapper mapper)
         {
             _context = context;
-            _configuration = configuration;
             _mapper = mapper;
         }
 
@@ -35,11 +33,9 @@ namespace BHYT.API.Controllers
                  .Where(healthHistory => healthHistory.CustomerId == id)
                  .ToListAsync();
 
-                if (customerHealthHistories != null)
-                {
-                    return Ok(_mapper.Map<List<HealthHistoryDTO>>(customerHealthHistories));
-                }
-                return NotFound(new ApiResponse { Message = "Không tìm lịch sử sức khỏe khách hàng !" });
+               
+                 return Ok(_mapper.Map<List<HealthHistoryDTO>>(customerHealthHistories));
+                
             }
             catch (Exception)
             {
