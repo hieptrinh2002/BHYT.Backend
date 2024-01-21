@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace BHYT.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerPolicyController : ControllerBase
@@ -147,13 +147,12 @@ namespace BHYT.API.Controllers
         {
             try
             {
+                var listUser = await _context.CustomerPolicies
+               .Where(x => x.CustomerId == id)
+               .OrderBy(x => x.Id)
+               .ToListAsync();
 
-                var policies = await _context.CustomerPolicies
-                              .Where(x => x.CustomerId == id)
-                              .OrderBy(x => x.Id)
-                              .ToListAsync();
-                return Ok(_mapper.Map<List<CustomerPolicyDTO>>(policies));
-
+                return Ok(_mapper.Map<List<CustomerPolicyDTO>>(listUser));
             }
             catch (Exception ex)
             {
