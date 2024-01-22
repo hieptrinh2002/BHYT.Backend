@@ -25,6 +25,7 @@ namespace BHYT.API.Controllers
             _configuration = configuration;
         }
 
+        [NonAction]
         public IEnumerable<Claim> GetClaims(User user)
         {
 
@@ -118,6 +119,8 @@ namespace BHYT.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+        [NonAction]
         public (string token, DateTime expire, string tokenId) GenerateToken(IEnumerable<Claim> claims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -137,6 +140,8 @@ namespace BHYT.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return (tokenHandler.WriteToken(token), token.ValidTo, token.Id);
         }
+
+        [NonAction]
         public string GenerateRefreshToken()
         {
             var random = new byte[32];
