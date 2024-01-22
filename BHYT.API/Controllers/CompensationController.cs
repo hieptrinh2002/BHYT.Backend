@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using BHYT.API.Models.DbModels;
 using BHYT.API.Models.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,9 @@ namespace BHYT.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+    [Authorize]
+
+
     public class CompensationController : ControllerBase
     {
         private readonly BHYTDbContext _context;
