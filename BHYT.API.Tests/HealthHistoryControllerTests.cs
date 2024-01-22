@@ -28,10 +28,6 @@ namespace BHYT.API.Tests
                .Options;
             _mockContext = new Mock<BHYTDbContext>(options);
             _mockMapper = new Mock<IMapper>();
-            _mockMapper.Setup(m => m.ConfigurationProvider).Returns(() => new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<HealthHistory, HealthHistoryDTO>();
-            }));
 
             _controller = new HealthHistoryController(_mockContext.Object, _mockMapper.Object);
 
