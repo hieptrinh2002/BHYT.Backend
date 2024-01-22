@@ -99,8 +99,8 @@ namespace BHYT.API.Controllers
                                     Account = new {
                                         account.Id,
                                         account.Username,
+                                        userId = user.Id
                                     },
-                                    userId = user.Id
                                 });
                             }
                             return BadRequest(new ApiResponse { Message = "invalid password !" });
