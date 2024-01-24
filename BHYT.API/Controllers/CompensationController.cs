@@ -76,6 +76,7 @@ namespace BHYT.API.Controllers
             }   
         }
 
+
         [HttpPost("update-status")]
         public async Task<ActionResult> updateStatus(UpdateCompensationStatusDTO dto)
         {
@@ -106,5 +107,29 @@ namespace BHYT.API.Controllers
                 });
             }
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CompensationDTO>>> GetCompensations()
+        {
+            try
+            {
+                var compensations = await _context.Compensations
+               .OrderBy(x => x.Id)
+               .ToListAsync();
+
+                return Ok(_mapper.Map<List<CompensationDTO>>(compensations));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new ApiResponseDTO
+                {
+                    Message = " lỗi lấy danh sách yêu cầu bồi thường",
+                });
+            }
+
+        }
+
+
     }
 }

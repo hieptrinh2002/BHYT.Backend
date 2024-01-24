@@ -34,9 +34,9 @@ namespace BHYT.API.Controllers
 
                 if (healthIndicators == null)
                 {
-                    return NotFound(new ApiResponseDTO
+                    return Ok(new ApiResponseDTO
                     {
-                        Message = " không tìm thấy khách hàng !"
+                        Message = " khách hàng chưa cập nhật chỉ số !"
                     });
                 }
 
@@ -61,17 +61,20 @@ namespace BHYT.API.Controllers
                .Where(x => x.CustomerId == dto.CustomerId)
                .FirstOrDefaultAsync();
 
-                if (healthIndicator == null)
+                if (healthIndicator == null) /// chưa bao giờ cập nhật
                 {
-                    return NotFound(new ApiResponseDTO
-                    {
-                        Message = " không tìm thấy thông tin chỉ số sức khỏe !"
-                    });
+                    var newHealthIndicator = new HealthIndicator();
+                    _mapper.Map(dto, newHealthIndicator);
+                    newHealthIndicator.LastestUpdate = DateTime.Now;
+                    _context.HealthIndicators.Add(newHealthIndicator);
                 }
-                // Ánh xạ từ dto sang healthIndicator
-                _mapper.Map(dto, healthIndicator);
-                healthIndicator.LastestUpdate = DateTime.Now;
+                else
+                {
+                    // Ánh xạ từ dto sang healthIndicator
+                    _mapper.Map(dto, healthIndicator);
+                    healthIndicator.LastestUpdate = DateTime.Now;
 
+                }
                 _context.SaveChanges();
 
                 return Ok(new ApiResponseDTO { Message = "Cập nhật thành công !" });
