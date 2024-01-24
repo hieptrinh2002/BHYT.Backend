@@ -101,7 +101,7 @@ namespace BHYT.API.Controllers
                             Guid = Guid.NewGuid(),
                             CustomerId = customerId,
                             Date = DateTime.UtcNow,
-                            Amount = invoice.Total / 100.0, // Stripe amounts are in cents
+                            Amount = invoice.Total, // Stripe amounts are in cents
                             Status = true,
                             Type = "Thanh toán",
                             SubscriptionId = subscriptionId
