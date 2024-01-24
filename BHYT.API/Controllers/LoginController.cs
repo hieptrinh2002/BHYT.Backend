@@ -99,8 +99,8 @@ namespace BHYT.API.Controllers
                                     Account = new {
                                         account.Id,
                                         account.Username,
+                                        userId = user.Id
                                     },
-                                    userId = user.Id
                                 });
                             }
                             return BadRequest(new ApiResponse { Message = "invalid password !" });
@@ -177,7 +177,7 @@ namespace BHYT.API.Controllers
                 var tokenVerification = jwtTokenHandler.ValidateToken(dto.AccessToken,tokenValidateParam, out SecurityToken validatedToken);
             
                 //Check algorithm
-                if (validatedToken is JwtSecurityToken jwtSecurityToken)
+                    if (validatedToken is JwtSecurityToken jwtSecurityToken)
                 {
                     var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
                     if (!result)//false
@@ -263,6 +263,25 @@ namespace BHYT.API.Controllers
                 }    
                 (string token, DateTime expiration, string tokenId) = GenerateToken(GetClaims(user));
                 string refreshToken = GenerateRefreshToken();
+
+
+                // add new refreshToken
+                // save token and refresh token 
+                var refreshTokenEntity = new RefreshToken
+                {
+                    Id = Guid.NewGuid(),
+                    AccessTokenId = tokenId,
+                    AccountId = storedToken.AccountId,
+                    Token = refreshToken,
+                    IsUsed = false,
+                    IsRevoked = false,
+                    IssuedAt = DateTime.UtcNow,
+                    ExpiredAt = DateTime.UtcNow.AddHours(Convert.ToInt64(_configuration["Jwt:RefreshTokenExpiryTimeInHour"]))
+                };
+
+                await _context.RefreshTokens.AddAsync(refreshTokenEntity);
+                await _context.SaveChangesAsync();
+
 
                 return Ok(new ApiResponseDTO
                 {

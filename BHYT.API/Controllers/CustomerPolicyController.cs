@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace BHYT.API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CustomerPolicyController : ControllerBase
