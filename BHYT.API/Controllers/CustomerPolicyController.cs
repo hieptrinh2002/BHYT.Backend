@@ -163,7 +163,37 @@ namespace BHYT.API.Controllers
                 });
             }
         }
+
+        [HttpPost("add-new")]
+        public async Task<IActionResult> AddNewCustomerPolicy([FromBody] RegisterPolicyDTO registerPolicyDTO)
+        {
+            try
+            {
+                CustomerPolicy newPolicy = new CustomerPolicy();
+                newPolicy = _mapper.Map<CustomerPolicy>(registerPolicyDTO);
+
+                newPolicy.Guid = Guid.NewGuid();
+                newPolicy.CreatedDate = DateTime.Now;
+                newPolicy.Status = false;
+                newPolicy.Company = "ABC company";
+                newPolicy.LatestUpdate = DateTime.Now;
+
+                _context.CustomerPolicies.Add(newPolicy);
+
+                await _context.SaveChangesAsync();
+                return Ok(new ApiResponseDTO
+                {
+                    Success = true,
+                    Message = "phát hành chính sách thành công!"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponseDTO { Message = "lỗi phát hành chính sách !" });
+            }
+        }
     }
 }
+    
 
 

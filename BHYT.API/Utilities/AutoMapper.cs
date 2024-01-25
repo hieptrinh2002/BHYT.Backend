@@ -21,6 +21,9 @@ namespace BHYT.API.Utilities
             CreateMap<Compensation, CompensationDTO>().ReverseMap()
                 .ForMember(dest => dest.Guid, opt => opt.MapFrom(src => Guid.NewGuid()));
 
+            CreateMap<InsuranceType, InsuranceTypeDTO>().ReverseMap();
+            CreateMap<CustomerPolicy, RegisterPolicyDTO>().ReverseMap();
+
         }
     }
 }

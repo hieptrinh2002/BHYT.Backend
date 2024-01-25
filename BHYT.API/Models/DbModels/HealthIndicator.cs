@@ -24,9 +24,11 @@ namespace BHYT.API.Models.DbModels
         public int? BPM { get; set; } // nhịp tim
 
         public int? RespiratoryRate { get; set; }
+        public string? BloodPressure { get; set; }
 
         public string? Diseases {  get; set; }
-
+        public string? Pregnant { get; set; }
+        public string? Drug { get; set; }   
         public DateTime? LastestUpdate { get; set; }
     }
 }
