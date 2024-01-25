@@ -293,7 +293,7 @@ public partial class BHYTDbContext : DbContext
                 Id = 2,
                 Guid = Guid.NewGuid(),
                 Name = "Health Insurance",
-                Description = "Covers medical expenses and healthcare services"
+                Description = "Covers medical expenses and healthcare services",
                 Summary = "Summary",
                 Price = 1500000,
                 Benefit = "1"
