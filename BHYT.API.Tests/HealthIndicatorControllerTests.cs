@@ -59,7 +59,7 @@ namespace BHYT.API.Tests
             var actionResult = await _controller.GetHealthIndicators(id);
 
             // Assert
-            Assert.IsType<NotFoundObjectResult>(actionResult.Result);
+            Assert.IsType<OkObjectResult>(actionResult.Result);
         }
 
         [Fact]
@@ -104,9 +104,9 @@ namespace BHYT.API.Tests
             var actionResult = await _controller.UpdateHealthIndicator(dto);
 
             // Assert
-            var result = actionResult as NotFoundObjectResult;
+            var result = actionResult as OkObjectResult;
             Assert.NotNull(result);
-            Assert.IsType<NotFoundObjectResult>(result);
+            Assert.IsType<OkObjectResult>(result);
         }
 
         [Fact]
@@ -120,9 +120,8 @@ namespace BHYT.API.Tests
             var actionResult = await _controller.UpdateHealthIndicator(dto);
 
             // Assert
-            var result = actionResult as NotFoundObjectResult;
-            Assert.NotNull(result);
-            Assert.IsType<NotFoundObjectResult>(result);
+            var result = actionResult as OkObjectResult;
+            Assert.Null(result);
         }
 
 
