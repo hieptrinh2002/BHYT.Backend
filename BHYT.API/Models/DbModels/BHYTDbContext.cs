@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 namespace BHYT.API.Models.DbModels;
 
@@ -282,7 +283,10 @@ public partial class BHYTDbContext : DbContext
                 Id = 1,
                 Guid = Guid.NewGuid(),
                 Name = "Life Insurance",
-                Description = "Provides coverage for the risk of life"
+                Description = "Provides coverage for the risk of life",
+                Summary = "Summary",
+                Price = 1000000,
+                Benefit="1"
             },
             new InsuranceType
             {
@@ -290,6 +294,9 @@ public partial class BHYTDbContext : DbContext
                 Guid = Guid.NewGuid(),
                 Name = "Health Insurance",
                 Description = "Covers medical expenses and healthcare services"
+                Summary = "Summary",
+                Price = 1500000,
+                Benefit = "1"
             }
         );
 
