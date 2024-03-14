@@ -1,7 +1,7 @@
 ﻿using AutoMapper.Internal;
 using BHYT.API.Models.DTOs;
 
-namespace BHYT.API.Utilities
+namespace BHYT.API.Services
 {
     public interface IEmailService
     {

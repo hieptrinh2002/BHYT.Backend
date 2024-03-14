@@ -5,14 +5,14 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace BHYT.API.Utilities
+namespace BHYT.API.Services
 {
     public class EmailService : IEmailService
     {
         private readonly EmailSettings emailSettings;
         public EmailService(IOptions<EmailSettings> options)
         {
-            this.emailSettings = options.Value;
+            emailSettings = options.Value;
         }
         public async Task SendEmailAsync(EmailDTO mailrequest)
         {
