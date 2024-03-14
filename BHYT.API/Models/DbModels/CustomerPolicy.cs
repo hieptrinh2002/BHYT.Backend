@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BHYT.API.Models.DbModels;
 
@@ -36,4 +37,13 @@ public partial class CustomerPolicy
     public bool? Status { get; set; } // true: duyệt r , false: chưa duyệt , null: loại bỏ
 
     public string? Company { get; set; }
+
+    public string ImageName { get; set; }
+
+    [NotMapped]
+    public IFormFile ImageFile { get; set; }
+
+    [NotMapped]
+    public string ImageSrc { get; set; }
+
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BHYT.API.Models.DbModels;
 
@@ -30,4 +31,13 @@ public partial class Compensation
     public string? Note { get; set; }
 
     public bool? Status { get; set; }
+
+    public string? ImageName { get; set; }
+
+    [NotMapped]
+    public IFormFile ImageFile { get; set; }
+
+    [NotMapped]
+    public string ImageSrc { get; set; }
+
 }

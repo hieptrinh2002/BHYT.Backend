@@ -13,9 +13,17 @@ public partial class Insurance
 
     public string? Description { get; set; }
 
-    public string? InsuranceTypeId { get; set; }
+    public int? InsuranceTypeId { get; set; }
 
     public byte? StartAge { get; set; }
 
     public byte? EndAge { get; set; }
+
+    public float? Price { get; set;}
+
+    public string? subInsuranceTypeName { get; set; }
+
+    public string? Slogan { get; set; }
+
+
 }

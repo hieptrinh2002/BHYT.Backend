@@ -11,7 +11,7 @@ namespace BHYT.API.Services
     {
         private readonly EmailSettings emailSettings;
         public EmailService(IOptions<EmailSettings> options)
-        {
+        {                                   
             emailSettings = options.Value;
         }
         public async Task SendEmailAsync(EmailDTO mailrequest)
