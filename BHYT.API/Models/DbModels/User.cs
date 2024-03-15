@@ -32,6 +32,7 @@ namespace BHYT.API.Models.DbModels
         public int AccountId { get; set; }  
 
         public string? CMND {  get; set; }  
+
         public string? BankNumber { get; set; }
 
         public string? Bank { get; set; }

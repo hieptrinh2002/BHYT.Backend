@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BHYT.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class HealthIndicatorController : ControllerBase

@@ -8,7 +8,7 @@ using Stripe;
 
 namespace BHYT.API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase

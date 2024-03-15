@@ -13,13 +13,16 @@
         public float? BMI { get; set; }
 
         public int? BPM { get; set; } // nhịp tim
-        public string? BloodPressure { get; set; }
 
         public int? RespiratoryRate { get; set; }
+        public string? BloodPressure { get; set; }
 
-        public string? Diseases { get; set; }
-        public string? Pregnant { get; set; }
-        public string? Drug { get; set; }
+        public string? PersonDiseases { get; set; }
+        public string? FamilyDiseases { get; set; }
+
+        public string? Pregnant { get; set; } // thai sản
+        public string? Drug { get; set; }  // Thuốc 
+        public DateTime? LastestUpdate { get; set; }
 
     }
 }

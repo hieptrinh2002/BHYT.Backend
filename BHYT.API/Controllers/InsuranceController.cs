@@ -24,12 +24,33 @@ namespace BHYT.API.Controllers
         public async Task<ActionResult> GetAllInsuranceByGroup()
         {
             try
-                {
+            {
                 var insurancePayments = _context.Insurances
-                       .GroupBy(insurance  => insurance.subInsuranceTypeName)  
+                       .GroupBy(insurance => insurance.subInsuranceTypeName)
                        .ToList();
 
-                 return Ok(insurancePayments);
+                return Ok(insurancePayments);
+
+            }
+            catch (Exception)
+            {
+                return Conflict(new ApiResponseDTO
+                {
+                    Message = "Lỗi xảy ra khi lấy insurance"
+                });
+            }
+        }
+
+        [HttpGet("{id}")    ]
+        public async Task<ActionResult> GetInsuranceById(int id)
+        {
+            try
+            {
+                var insurancePayments = _context.Insurances
+                       .Where(x => x.Id == id)
+                       .Single();
+
+                return Ok(insurancePayments);
 
             }
             catch (Exception)
