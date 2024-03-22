@@ -23,6 +23,7 @@ namespace BHYT.API.Utilities
 
             CreateMap<InsuranceType, InsuranceTypeDTO>().ReverseMap();
             CreateMap<CustomerPolicy, RegisterPolicyDTO>().ReverseMap();
+            CreateMap<CustomerPolicy, AddNewPolicyDTO>().ReverseMap();
             CreateMap<Insurance, insuranceDTO>().ReverseMap();
 
 

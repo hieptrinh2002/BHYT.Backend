@@ -165,26 +165,32 @@ namespace BHYT.API.Controllers
         }
 
         [HttpPost("add-new")]
-        public async Task<IActionResult> AddNewCustomerPolicy([FromBody] RegisterPolicyDTO registerPolicyDTO)
+        public async Task<IActionResult> AddNewCustomerPolicy([FromBody] AddNewPolicyDTO dto)
         {
             try
             {
                 CustomerPolicy newPolicy = new CustomerPolicy();
-                newPolicy = _mapper.Map<CustomerPolicy>(registerPolicyDTO);
+                newPolicy = _mapper.Map<CustomerPolicy>(dto);
+                Insurance temp = await _context.Insurances.FirstOrDefaultAsync(x => x.Id == newPolicy.InsuranceId);
+
 
                 newPolicy.Guid = Guid.NewGuid();
+                //newPolicy.StartDate = DateTime.Parse(dto.StartDate);
                 newPolicy.CreatedDate = DateTime.Now;
                 newPolicy.Status = false;
-                newPolicy.Company = "ABC company";
+                newPolicy.Company = "VINA LIFE";
                 newPolicy.LatestUpdate = DateTime.Now;
-
+                newPolicy.EndDate = DateTime.Parse(dto.StartDate).AddYears(dto.Year);
+                newPolicy.ImageName = "";
+                newPolicy.PremiumAmount = temp.Price;
+                newPolicy.CoverageType = temp.Name;
                 _context.CustomerPolicies.Add(newPolicy);
 
                 await _context.SaveChangesAsync();
                 return Ok(new ApiResponseDTO
                 {
                     Success = true,
-                    Message = "phát hành chính sách thành công!"
+                    Message ="Đăng kí chính sách thành công!"
                 });
             }
             catch (Exception ex)
@@ -194,6 +200,22 @@ namespace BHYT.API.Controllers
         }
     }
 }
-    
+//public int Id { get; set; }
+//public Guid? Guid { get; set; }
+//public int? CustomerId { get; set; }
+//public DateTime? StartDate { get; set; }
+//public DateTime? CreatedDate { get; set; }
+//public DateTime? EndDate { get; set; }
+//public double? PremiumAmount { get; set; }
+//public bool? PaymentOption { get; set; }  // loại thanh toán true: Tháng, false : năm
+//public string? CoverageType { get; set; }
+//public double? DeductibleAmount { get; set; }
+//public int? BenefitId { get; set; }
+//public int? InsuranceId { get; set; }
+//public DateTime? LatestUpdate { get; set; }
+//public string? Description { get; set; }
+//public bool? Status { get; set; } // true: duyệt r , false: chưa duyệt , null: loại bỏ
+//public string? Company { get; set; }
+
 
 

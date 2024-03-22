@@ -20,7 +20,7 @@ public partial class CustomerPolicy
 
     public double? PremiumAmount { get; set; }
 
-    public bool? PaymentOption { get; set; }
+    public bool? PaymentOption { get; set; }  // loại thanh toán true: Tháng, false : năm
 
     public string? CoverageType { get; set; }
 

@@ -1,11 +1,13 @@
 using BHYT.API.Models.DbModels;
 using BHYT.API.Models.DTOs;
 using BHYT.API.Services;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Stripe;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +27,10 @@ builder.Services.AddHttpContextAccessor();
 //Email
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddTransient<IEmailService, EmailService>();
+
+//// register Cloudinary
+//builder.Services.Configure<CloudinarySettiings>(builder.Configuration.GetSection("CloudinarySettings"));
+//builder.Services.AddSingleton(new Cloudinary(cloudinarySettings));
 
 // Adding Authentication  
 builder.Services.AddAuthentication(options =>
